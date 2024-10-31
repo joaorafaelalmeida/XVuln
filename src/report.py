@@ -42,8 +42,12 @@ def produce_single_sarif(file, output_dir, t):
     basename = os.path.basename(file)
 
     with open(file,"r") as f:
-        data = json.loads(f.read())
-
+        try:
+            data = json.loads(f.read())
+        except Exception as e:
+            utils.log_message(utils.msglvl.ERROR, 'Could not parse file "{}", {}', file, repr(e))
+            return
+        
     # Get information on the tool and it's rules 
     info_rules_tools = data["runs"][0]["tool"]["driver"]
 
@@ -67,7 +71,7 @@ def produce_single_sarif(file, output_dir, t):
     env = Environment(loader=FileSystemLoader("templates"), autoescape=True, extensions=['jinja2.ext.do'])
     template = env.get_template(f'Sarif_to_{t}.jinja2')
     output_from_parsed_template = template.render(tool=tool_info,rules=rules_info,results=results_info)
-    utils.log_message(utils.msglvl.DEBUG, 'Creating report file "{}"', output_dir + "/" + basename.split(".sarif")[0]+extension)
+    utils.log_message(utils.msglvl.DEBUG, 'Creating report file "{}"', basename.split(".sarif")[0]+extension)
     if t == "PDF":
         pisa.CreatePDF(
             src=output_from_parsed_template,  # HTML to convert
