@@ -1,0 +1,56 @@
+{% macro print_dict(d,indent=0) %} 
+{%- set idxs = [0] -%}
+{%- for key, value in d recursive%}
+{%- if value %}
+{{indent * " " + (idxs|length - 1) * 2 * " "}}+ <details>
+{{indent * " " + (idxs|length - 1) * 2 * " " + 2 * " "}}<summary>{{ key.capitalize() }}</summary>
+{% if value is mapping %}
+{%- do idxs.append(loop.index) -%}
+{{ loop(value.items())}}
+{%- do idxs.pop() -%}
+{% elif value is iterable and (value is not string and value is not mapping) %}
+{% for var in value %}
+{% if var is mapping %}
+{{ print_dict(var.items(), indent=(idxs|length - 1) * 2 + 1) }}
+{% endif %}
+{% endfor %}
+{% else %}
+{{indent * " " + (idxs|length - 1) * 2 * " " + 2 * " "}}- {{value}}
+{%- endif %}   
+{{indent * " " + (idxs|length - 1) * 2 * " " + 2 * " "}}</details>
+
+{%- endif %}
+{%- endfor %} 
+{%- endmacro %}
+
+{% macro addDetailsMD(title,info) %}
++ <details>
+    <summary>{{title}}</summary>
+    <br>
+    {{ info.replace("\n","\n\t") }}
+    </details>
+{%- endmacro %}
+
+{% macro addDetailsHTML(title,info) %}
+<details>
+    <summary>{{title}}</summary>
+    <br>
+    <p>&nbsp;&nbsp;&nbsp;&nbsp{{ info.replace("\n","\n\t") }}</p>
+    </details>
+{%- endmacro %}
+
+{% macro addDetailsUrlMD(title,info) %}
++ <details>
+    <summary>{{title}}</summary>
+    <br>
+    <a href="{{ info }}">{{ info }}</a>
+    </details>
+{%- endmacro %}
+
+{% macro addDetailsUrlHTML(title,info) %}
+<details>
+    <summary>{{title}}</summary>
+    <br>
+    <p>&nbsp;&nbsp;&nbsp;&nbsp;<a href="{{ info }}">{{ info }}</a></p>
+    </details>
+{%- endmacro %}

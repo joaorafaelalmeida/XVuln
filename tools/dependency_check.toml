@@ -1,0 +1,11 @@
+tag = "8.2.1"
+image = "owasp/dependency-check"
+output_volume_docker = "/report"
+input_volume_docker = "/src"
+default_option = "scan"
+share_socket = 0
+share_network = 1
+
+[options]
+    
+scan = "{custom_args} --enableExperimental -f SARIF -o {output_place} --scan /src/{0}"

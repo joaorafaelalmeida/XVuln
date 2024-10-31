@@ -1,0 +1,11 @@
+tag = "v0.4.9"
+image = "goodwithtech/dockle"
+output_volume_docker = ""
+input_volume_docker = "/path"
+default_option = "image"
+share_socket = 1
+share_network = 0
+
+[options]
+    
+image = "{custom_args} -f sarif -o {output_place} {0}"

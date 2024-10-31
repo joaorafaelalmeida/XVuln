@@ -1,0 +1,12 @@
+tag = "v0.54.0"
+image = "anchore/grype"
+output_volume_docker = ""
+input_volume_docker = ""
+default_option = "image"
+share_socket = 1
+share_network = 0
+
+[options]
+    
+image = "{custom_args} -o sarif --file {output_place} {0}"
+scan = "{custom_args} -o sarif --file {output_place} dir:/input/{0}"

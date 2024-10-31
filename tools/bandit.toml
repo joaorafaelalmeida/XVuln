@@ -1,0 +1,11 @@
+tag = "latest-py3.8"
+image = "cytopia/bandit"
+output_volume_docker = ""
+input_volume_docker = "/data"
+default_option = "scan"
+share_socket = 0
+share_network = 0
+
+[options]
+    
+scan = "{custom_args} -f json -o {output_place} {0}"

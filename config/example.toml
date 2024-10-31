@@ -1,0 +1,19 @@
+[[runs]]
+
+tool = "hadolint"
+option = "scan"
+args = ["<dockerfile_placeholder>"]
+
+[[runs]]
+
+tool = "dockle"
+option = "scan"
+args = ["<image_placeholder>"]
+custom_args = "--timeout 600s"
+
+[[runs]]
+
+tool = "trivy"
+option = "image"
+args = ["<image_placeholder>"]
+depends_on= ["dockle"]

@@ -1,0 +1,11 @@
+tag = "v2.12.0-debian"
+image = "hadolint/hadolint"
+output_volume_docker = ""
+input_volume_docker = ""
+default_option = "scan"
+share_socket = 0
+share_network = 0
+
+[options]
+
+scan = 'sh -c "hadolint /input/{0} {custom_args} -f sarif | tee {output_place}"'

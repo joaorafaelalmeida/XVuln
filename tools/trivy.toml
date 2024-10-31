@@ -1,0 +1,12 @@
+tag = "0.34.0"
+image = "aquasec/trivy"
+output_volume_docker = ""
+input_volume_docker = ""
+default_option = "image"
+share_socket = 1
+share_network = 1
+
+[options]
+    
+image = "image {custom_args} -f sarif --output {output_place} {0}"
+scan = "fs /input/{0} -f sarif --output {output_place} {custom_args}"

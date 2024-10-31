@@ -1,0 +1,7 @@
+active="false"
+verified="false"
+product_name="Integration"
+engagement_name="AutomaticUpload"
+url="http://localhost:8080"
+file="" #"Reporting/trivy_scan.sarif"
+dir="Reporting"
