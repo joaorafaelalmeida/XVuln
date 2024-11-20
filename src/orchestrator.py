@@ -206,6 +206,8 @@ def create_tool(tool, input_dir_host, output_dir_host, config_dir_host , to_clea
     input_volume_docker = utils.INPUT_DIR_DOCKER if config["input_volume_docker"] == "" else config["input_volume_docker"]
 
     # Output file
+    # TODO: Add configuration option for file extension customizability?? ".sarif" would be the default if no extension provided
+    # Note that some tools can take a "-f" argument to specify the extension format
     output = f"{output_volume_docker}/{utils.REPORT_DIR}/{tool}_{option}.sarif"
     
     # Clear already existing output files to prevent file concatenation

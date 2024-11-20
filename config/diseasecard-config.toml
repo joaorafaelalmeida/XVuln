@@ -1,0 +1,51 @@
+[[runs]]
+
+tool = "hadolint"
+option = "scan"
+args = ["Diseasecard/backend/Dockerfile"]
+
+[[runs]]
+
+tool = "eslint"
+option = "scan"
+args = ["Diseasecard"]
+custom_args = "--no-eslintrc"
+
+[[runs]]
+
+tool = "semgrep"
+option = "scan"
+args = ["Diseasecard"]
+platform = "linux/amd64"
+
+[[runs]]
+
+tool = "horusec"
+option = "scan"
+args = ["Diseasecard"]
+
+[[runs]]
+
+tool = "gitleaks"
+option = "detect"
+args = ["Diseasecard"]
+custom_args = "--exit-code 0"
+
+[[runs]]
+
+tool = "trivy"
+option = "scan"
+args = ["Diseasecard"]	# scan option
+
+[[runs]]
+
+tool = "grype"
+option = "scan"
+args = ["Diseasecard"]	# scan option
+#args = ["apache/superset"]	# image option
+
+#[[runs]]
+#
+#tool = "zap"
+#option = "scan"
+#args = ["http://localhost:8080/"] # url of the running webserver to be analyzed by zap

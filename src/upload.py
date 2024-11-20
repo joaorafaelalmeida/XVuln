@@ -18,9 +18,15 @@ def upload_file(config, auth_key, file):
     """
 
     params = {k:v for k,v in config.items() if k not in ["url","file","dir","auth"]}
-    params["scan_type"] = "SARIF"
+    # TODO: Implement the ability to specify the uploading scan type of the report, and if not specified, use "SARIF" by default
+    if 'eslint' in file:
+        params["scan_type"] = "ESLint Scan"
+    else:
+        params["scan_type"] = "SARIF"
 
     headers = {'Authorization': 'Token {}'.format(auth_key)}
+
+    # TODO: Abort if there already is an upload with the same scanner name for this specific product engagement??
 
     with open(file) as f:
         #r = requests.post("{url}/api/v2/import-scan/".format(url=config["url"]), files={'file': f}, data=params, headers=headers)
@@ -63,7 +69,7 @@ def create_dojo_product(config, auth_key):
                     product_exists = True
                     product_id = result['id']
                     utils.log_message(utils.msglvl.DEBUG, 'Found product "{}" in DefectDojo', config['product_name'])
-        utils.log_message(utils.msglvl.INFO, 'Get products concluded with code {}, {} total products', r.status_code, r.json()['count'])
+        utils.log_message(utils.msglvl.INFO, 'Get products concluded with code {}{}', r.status_code, f': {r.json()["detail"]}' if 'detail' in r.json() else '')
     except Exception as e:
         utils.log_message(utils.msglvl.ERROR, 'Could not get DefectDojo products, {}', repr(e))
 
@@ -78,8 +84,9 @@ def create_dojo_product(config, auth_key):
 
         try:
             r = requests.post("{url}/api/v2/products/".format(url=config['url']), data=params, headers=headers)
-            product_id = r.json()['id']
-            utils.log_message(utils.msglvl.INFO, 'Post product "{}" concluded with code {}, product id {}', config['product_name'], r.status_code, r.json()['id'])
+            if 'id' in r.json():
+                product_id = r.json()['id']
+            utils.log_message(utils.msglvl.INFO, 'Post product "{}" concluded with code {}{}', config['product_name'], r.status_code, f': {r.json()["detail"]}' if 'detail' in r.json() else '')
         except Exception as e:
             utils.log_message(utils.msglvl.ERROR, 'Could not post DefectDojo product, {}', repr(e))
 
@@ -106,7 +113,7 @@ def create_dojo_engagement(config, auth_key):
                 if result['name'] == config['engagement_name']:
                     engagement_exists = True
                     utils.log_message(utils.msglvl.DEBUG, 'Found engagement "{}" in DefectDojo', config['engagement_name'])
-        utils.log_message(utils.msglvl.INFO, 'Get engagements concluded with code {}, {} total engagements', r.status_code, r.json()['count'])
+        utils.log_message(utils.msglvl.INFO, 'Get engagements concluded with code {}{}', r.status_code, f': {r.json()["detail"]}' if 'detail' in r.json() else '')
     except Exception as e:
         utils.log_message(utils.msglvl.ERROR, 'Could not get DefectDojo engagements, {}', repr(e))
 
@@ -123,7 +130,7 @@ def create_dojo_engagement(config, auth_key):
 
         try:
             r = requests.post("{url}/api/v2/engagements/".format(url=config['url']), data=params, headers=headers)
-            utils.log_message(utils.msglvl.INFO, 'Post engagement "{}" concluded with code {}, engagement id {}', config['engagement_name'], r.status_code, r.json()['id'])
+            utils.log_message(utils.msglvl.INFO, 'Post engagement "{}" concluded with code {}{}', config['engagement_name'], r.status_code, f': {r.json()["detail"]}' if 'detail' in r.json() else '')
         except Exception as e:
             utils.log_message(utils.msglvl.ERROR, 'Could not post DefectDojo engagement, {}', repr(e))
 

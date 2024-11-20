@@ -1,0 +1,61 @@
+#[[runs]]
+#
+#tool = "hadolint"
+#option = "scan"
+#args = ["MonarcAppFO/Dockerfile"]
+
+[[runs]]
+
+tool = "semgrep"
+option = "scan"
+args = ["MonarcAppFO"]
+platform = "linux/amd64"
+
+#[[runs]]
+#
+#tool = "dependency_check"
+#option = "scan"
+#args = ["MonarcAppFO/requirements/base.txt"]
+#platform = "linux/amd64"
+
+[[runs]]
+
+tool = "horusec"
+option = "scan"
+args = ["MonarcAppFO"]
+
+[[runs]]
+
+tool = "gitleaks"
+option = "detect"
+args = ["MonarcAppFO"]
+custom_args = "--exit-code 0"
+
+#[[runs]]
+#
+#tool = "dockle"
+#option = "image"
+#args = ["monarcappfo"]
+#custom_args = "--timeout 600s"
+
+[[runs]]
+
+tool = "trivy"
+option = "scan"
+args = ["MonarcAppFO"]	# scan option
+#args = ["apache/superset"]	# image option
+#depends_on = ["dockle"]
+
+#[[runs]]
+#
+#tool = "zap"
+#option = "scan"
+#args = ["http://localhost:8080/"] # url of the running webserver to be analyzed by zap
+
+[[runs]]
+
+tool = "grype"
+option = "scan"
+args = ["MonarcAppFO"]	# scan option
+#args = ["apache/superset"]	# image option
+

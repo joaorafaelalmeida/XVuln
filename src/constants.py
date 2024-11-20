@@ -1,5 +1,5 @@
 # Constants
-REPORT_DIR = "Reporting"                                    # Directory that will store the reports generated
+REPORT_DIR = "Reports"                                      # Directory that will store the reports generated
 LOGS_DIR = "Logs"                                           # Directory that will store the logs created (By this orchestrator and each tool)
 OUTPUT_DIR_DOCKER = "/output"                               # Default directory that is used to share output information (From docker's prespective)
 INPUT_DIR_DOCKER = "/input"                                 # Default directory that is used to share input information (From docker's prespective)
