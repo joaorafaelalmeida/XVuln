@@ -322,6 +322,9 @@ def run_tasks(runs, input_dir_host, output_dir_host, config_dir_host):
 
     return to_clean
 
+
+# NOTE: Functions below moved to a separate module, remove them when deemed appropriate
+
 # Vulnerability ignoring functions
 
 def hash_vuln(vuln):

@@ -5,6 +5,7 @@ import toml
 import argparse
 
 import src.orchestrator as orchestrator
+import src.filtrate as filtrate
 import src.report as report
 import src.upload as upload
 import src.utils as utils
@@ -25,6 +26,18 @@ def parse():
                         help='Message printing level')
     orchestrator_parser.add_argument('--keep-images', action='store_true',
                         help='Keep images after finishing') # This makes the key "--keep-images" act as a flag, more precisely a toggle (does not require value)
+
+    filtrate_parser = subparsers.add_parser("filtrate", help="Filtrate report files entries")
+    filtrate_parser.add_argument('--input-dir-host', type=str, required=True,
+                        help='Directory to be shared with docker for input')
+    filtrate_parser.add_argument('--output-dir-host', type=str, required=True,
+                        help='Directory to be shared with the docker runs for output')
+    filtrate_parser.add_argument('--config-dir-host', type=str, required=True,
+                        help='Directory to be shared with the docker runs for configuration')
+    filtrate_parser.add_argument('--config', type=str, required=True,
+                        help='Current path')
+    filtrate_parser.add_argument('--message-level', type=str, required=True,
+                        help='Message printing level')
 
     report_parser = subparsers.add_parser("report", help="Produce Markdown reports from sarif files")
     report_parser.add_argument('--type', type=str, required=True,
@@ -67,7 +80,9 @@ def main():
 
         orchestrator.finish(to_clean, command_args["keep_images"])
 
-        orchestrator.update_sarif_reports()
+    if command == 'filtrate':
+
+        filtrate.update_sarif_reports()
     
     if command == "report":
 

@@ -22,6 +22,27 @@ services:
       - "--message-level"
       - "${ORCHESTRATOR_MSG_LVL}"
       - "--keep-images"
+  filtrate:
+    build:
+      context: ../
+      dockerfile: ./docker/Dockerfile
+    image: joaorafaelalmeida/trustvuln
+    volumes:
+      - ${ORCHESTRATOR_INPUT_HOST_DIR}:/input:ro
+      - ${ORCHESTRATOR_OUTPUT_HOST_DIR}:/output:rw
+      - ${CONFIG_HOST_DIR}:/config:ro
+    command:
+      - "filtrate"
+      - "--input-dir-host"
+      - "${ORCHESTRATOR_INPUT_HOST_DIR}"
+      - "--output-dir-host"
+      - "${ORCHESTRATOR_OUTPUT_HOST_DIR}"
+      - "--config-dir-host"
+      - "${CONFIG_HOST_DIR}"
+      - "--config"
+      - "/config/${ORCHESTRATOR_CONFIG_FILE}"
+      - "--message-level"
+      - "${ORCHESTRATOR_MSG_LVL}"
   report:
     build:
       context: ../

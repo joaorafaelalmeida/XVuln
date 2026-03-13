@@ -1,0 +1,87 @@
+#############################
+# Secret scanning
+#############################
+
+[[runs]]
+
+tool = "gitleaks"	# scan for exposed secrets
+option = "detect"
+args = ["BenchmarkJava"]
+custom_args = "--exit-code 0"
+
+#############################
+# Container scanning
+#############################
+
+[[runs]]
+
+tool = "dockle"	# cotainer image linter
+option = "image"
+args = ["owasp/benchmark"]
+custom_args = "--timeout 600s"
+
+[[runs]]
+
+tool = "trivy"
+option = "scan"
+args = ["BenchmarkJava"]	# local directory scanning option
+#args = ["owasp/benchmark"]	# docker image scanning option
+depends_on = ["dockle"]
+
+[[runs]]
+
+tool = "hadolint"	# Dockerfile linter
+option = "scan"
+args = ["BenchmarkJava/VMs/Dockerfile"]
+
+[[runs]]
+
+tool = "grype"	# container images and filesystem vulnerability scanner
+option = "scan"
+args = ["BenchmarkJava"]	# local directory scanning option
+#args = ["owasp/benchmark"]	# docker image scanning option
+
+#############################
+# Code scanning
+#############################
+
+#[[runs]]
+#
+#tool = "eslint"
+#option = "scan"
+#args = ["BenchmarkJava"]
+#custom_args = "--no-eslintrc"
+
+#[[runs]]
+#
+#tool = "flake8"
+#option = "scan"
+#args = ["BenchmarkJava"]
+
+[[runs]]
+
+tool = "semgrep"	# vulnerability scanning tool supporting 30+ coding languages
+option = "scan"
+args = ["BenchmarkJava"]
+platform = "linux/amd64"
+
+#############################
+# SCA
+#############################
+
+[[runs]]
+
+tool = "dependency_check"	# scan vulnerabilities in dependency files of various dependency managers
+option = "scan"
+args = ["BenchmarkJava"]
+platform = "linux/amd64"
+
+#############################
+# DAST
+#############################
+
+[[runs]]
+
+tool = "zap"    # application runtime vulnerability scan
+option = "scan"
+args = ["https://localhost:8443/benchmark"] # url of the running webserver to be analyzed by zap

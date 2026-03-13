@@ -1,0 +1,100 @@
+#############################
+# Secret scanning
+#############################
+
+[[runs]]
+
+tool = "gitleaks"
+option = "detect"
+args = ["superset"]
+custom_args = "--exit-code 0"
+
+#############################
+# Container scanning
+#############################
+
+[[runs]]
+
+tool = "dockle"
+option = "image"
+args = ["apache/superset"]
+custom_args = "--timeout 600s"
+
+[[runs]]
+
+tool = "hadolint"
+option = "scan"
+args = ["superset/Dockerfile"]
+
+[[runs]]
+
+tool = "trivy"
+option = "scan"
+args = ["superset"]	# scan option
+#args = ["apache/superset"]	# image option
+depends_on = ["dockle"]
+
+#[[runs]]
+#
+#tool = "grype"
+#option = "scan"
+#args = ["superset"]	# scan option
+##args = ["apache/superset"]	# image option
+
+#############################
+# Code scanning
+#############################
+
+#[[runs]]
+#
+#tool = "eslint"
+#option = "scan"
+#args = ["superset"]
+#custom_args = "--no-eslintrc"
+
+#[[runs]]
+#
+#tool = "flake8"
+#option = "scan"
+#args = ["superset"]
+
+[[runs]]
+
+tool = "bandit"
+option = "scan"
+args = ["superset"]
+custom_args = "-r"
+
+[[runs]]
+
+tool = "semgrep"
+option = "scan"
+args = ["superset"]
+platform = "linux/amd64"
+
+#[[runs]]
+#
+#tool = "horusec"
+#option = "scan"
+#args = ["superset"]
+
+#############################
+# SCA
+#############################
+
+[[runs]]
+
+tool = "dependency_check"
+option = "scan"
+args = ["superset/requirements/base.txt"]
+platform = "linux/amd64"
+
+#############################
+# DAST
+#############################
+
+[[runs]]
+
+tool = "zap"
+option = "scan"
+args = ["http://localhost:8080/"] # url of the running webserver to be analyzed by zap
