@@ -1,4 +1,4 @@
-tag = "0.34.0"
+tag = "latest"
 image = "aquasec/trivy"
 output_volume_docker = ""
 input_volume_docker = ""

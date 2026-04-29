@@ -1,4 +1,4 @@
-tag = "20250407"
+tag = "latest"
 image = "zaproxy/zap-stable"
 output_volume_docker = "/zap/wrk"
 input_volume_docker = ""

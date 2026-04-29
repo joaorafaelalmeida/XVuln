@@ -1,0 +1,11 @@
+tag = "latest"
+image = "instrumentisto/nmap"
+output_volume_docker = ""
+input_volume_docker = "/src"
+default_option = "discover"
+share_socket = 0
+share_network = 1
+
+[options]
+
+discover = "nmap -p {0} --script http-enum,http-title,http-methods,http-headers --host-timeout 1m -oA {output_place} {1}"

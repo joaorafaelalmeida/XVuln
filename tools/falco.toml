@@ -1,0 +1,12 @@
+tag = "latest-debian"
+image = "falcosecurity/falco"
+output_volume_docker = ""
+input_volume_docker = "/src"
+default_option = "monitor"
+share_socket = 1
+share_network = 0
+share_host_system_dirs = 1
+
+[options]
+
+monitor = "sh -c 'falco -U -o json_output=true -o file_output.enabled=true -o file_output.filename={output_place} & sleep 60; kill %1'"

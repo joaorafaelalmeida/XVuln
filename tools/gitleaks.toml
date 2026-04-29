@@ -1,4 +1,4 @@
-tag = "v8.15.0"
+tag = "latest"
 image = "zricethezav/gitleaks"
 output_volume_docker = ""
 input_volume_docker = "/path"

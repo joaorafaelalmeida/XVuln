@@ -1,5 +1,6 @@
 import json
 from enum import Enum
+from datetime import datetime
 
 from src.constants import *
 
@@ -26,7 +27,7 @@ def log_message(level, fstr, *args, **kwargs):
 
     if msglvl_list.index(level) >= msglvl_list.index(MESSAGE_MIN_LEVEL):
         fstr = fstr.format(*args, **kwargs)
-        print(f'[TrustVuln] {level}:', fstr, flush=True)
+        print(f'[{datetime.now().strftime("%H:%M:%S")}] [XVuln] {level}:', fstr, flush=True)
 
 def print_config(config):
     """

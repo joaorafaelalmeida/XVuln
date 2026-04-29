@@ -1,0 +1,66 @@
+#############################
+# SPOOFING
+#############################
+
+[[runs]]
+
+tool = "semgrep"	# vulnerability scanning tool supporting 30+ coding languages
+option = "scan"
+args = ["BenchmarkJava"]
+platform = "linux/amd64"
+
+#############################
+# TAMPERING
+#############################
+
+[[runs]]
+
+tool = "zap"    # application runtime vulnerability scan
+option = "scan"
+args = ["https://localhost:8443/benchmark"] # url of the running webserver to be analyzed by zap
+depends_on = ["gitleaks"]
+
+#############################
+# REPUDIATION
+#############################
+
+[[runs]]
+
+tool = "falco"    # OS runtime monitor
+option = "monitor"
+args = ["BenchmarkJava"]    # not needed for falco
+depends_on = ["gitleaks"]
+
+#############################
+# INFORMATION DISCLOSURE (Secret scanning)
+#############################
+
+[[runs]]
+
+tool = "gitleaks"	# scan for exposed secrets
+option = "detect"
+args = ["BenchmarkJava"]
+custom_args = "--exit-code 0"
+
+#############################
+# DENIAL OF SERVICE
+#############################
+
+[[runs]]
+
+tool = "nmap"    # endpoint enumeration scan
+option = "discover"
+args = ["8443", "localhost"] # url of the running webserver to be enumerated by nmap
+depends_on = ["gitleaks"]
+
+#############################
+# ELEVATION OF PRIVILEGE
+#############################
+
+[[runs]]
+
+tool = "trivy"
+option = "scan"
+args = ["BenchmarkJava"]	# local directory scanning option
+#args = ["owasp/benchmark"]	# docker image scanning option
+#depends_on = ["dockle"]

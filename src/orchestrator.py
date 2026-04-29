@@ -178,7 +178,8 @@ def create_tool(tool, input_dir_host, output_dir_host, config_dir_host , to_clea
     :param arguments: Dictionary with tool specific arguments
     """
 
-    docker_cmd = "docker create {network} --name {name} {platform} -v {output_volume}:{output_volume_docker}:rw \
+    docker_cmd = "docker create {network} --name {name} {platform} {privileged} -v {output_volume}:{output_volume_docker}:rw \
+                    {host_system_dirs} \
                     -v {input_volume}:{input_volume_docker}:rw \
                     -v {config_volume}:{config_volume_docker}:ro  \
                     {socket} \
@@ -196,6 +197,15 @@ def create_tool(tool, input_dir_host, output_dir_host, config_dir_host , to_clea
 
     network = "--network host" if config["share_network"] else ""
     socket = "-v /var/run/docker.sock:/var/run/docker.sock" if config["share_socket"] else ""
+
+    privileged = "--privileged" if config.get("share_host_system_dirs") else ""
+    host_system_dirs = """
+                    -v /dev:/host/dev \
+                    -v /proc:/host/proc:ro \
+                    -v /boot:/host/boot:ro \
+                    -v /lib/modules:/host/lib/modules:ro \
+                    -v /usr:/host/usr:ro \
+                        """ if config.get("share_host_system_dirs") else ""
 
     # Set a default option if none was specified
     if not option:
@@ -239,8 +249,9 @@ def create_tool(tool, input_dir_host, output_dir_host, config_dir_host , to_clea
     utils.log_message(utils.msglvl.DEBUG, '<{}> has designation "{}"', tool, designation)
 
     call = docker_cmd.format(output_volume=output_dir_host, input_volume=input_dir_host, config_volume=config_dir_host,\
-                        output_volume_docker=output_volume_docker, input_volume_docker=input_volume_docker, config_volume_docker=utils.CONFIG_DIR_DOCKER,  \
-                        designation=designation, option=option_cmd, name=name, platform=platform, network=network, socket=socket)
+                        output_volume_docker=output_volume_docker, input_volume_docker=input_volume_docker, config_volume_docker=utils.CONFIG_DIR_DOCKER,\
+                        designation=designation, option=option_cmd, name=name, platform=platform, network=network, socket=socket,\
+                        privileged=privileged, host_system_dirs=host_system_dirs)
 
     utils.log_message(utils.msglvl.DEBUG, '<{}> has call "{}"', tool, call)
 

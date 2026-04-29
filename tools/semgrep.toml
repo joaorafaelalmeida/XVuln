@@ -1,4 +1,4 @@
-tag = "pro-sha-5ea0eee4a2b4d28bd1eea4916828bd32a4ad7688-nonroot"
+tag = "latest"
 image = "semgrep/semgrep"
 output_volume_docker = ""
 input_volume_docker = "/src"
@@ -7,5 +7,5 @@ share_socket = 0
 share_network = 0
 
 [options]
-    
+
 scan = "semgrep scan --config auto --sarif --output {output_place} {0}"
