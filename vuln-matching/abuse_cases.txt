@@ -1,0 +1,27 @@
+﻿ABUSE CASE 1: Credential Theft via Exposed Secrets
+An attacker scans public or internal repositories to find hardcoded API keys, passwords, or tokens left in source code, enabling unauthorized access to backend systems or third-party services.
+STRIDE Category: Information Disclosure
+
+ABUSE CASE 2: Authentication Bypass
+An attacker exploits weak or misconfigured authentication mechanisms to impersonate a legitimate user or administrator, gaining access to protected resources without valid credentials.
+STRIDE Category: Spoofing
+
+ABUSE CASE 3: Sensitive Data Exposure via API
+An attacker intercepts or directly queries API endpoints that return sensitive user data without proper authorization checks, exposing personally identifiable information (PII).
+STRIDE Category: Information Disclosure
+
+ABUSE CASE 4: Privilege Escalation via Misconfiguration
+An attacker exploits misconfigured access controls or container permissions to escalate privileges, gaining administrative access to the system or underlying infrastructure.
+STRIDE Category: Elevation of Privilege
+
+ABUSE CASE 5: Injection Attack
+An attacker crafts malicious input (SQL, command, LDAP) that is executed by the application due to insufficient input validation, allowing data theft, data manipulation, or system compromise.
+STRIDE Category: Tampering
+
+ABUSE CASE 6: Log Tampering / Audit Evasion
+An attacker modifies or deletes application logs after a breach to cover their tracks, preventing forensic analysis and making incident response significantly harder.
+STRIDE Category: Repudiation
+
+ABUSE CASE 7: Denial of Service via Resource Exhaustion
+An attacker sends a high volume of requests or crafts payloads that consume excessive server resources, causing the application to become unavailable to legitimate users.
+STRIDE Category: Denial of Service
