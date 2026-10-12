@@ -25,3 +25,23 @@ STRIDE Category: Repudiation
 ABUSE CASE 7: Denial of Service via Resource Exhaustion
 An attacker sends a high volume of requests or crafts payloads that consume excessive server resources, causing the application to become unavailable to legitimate users.
 STRIDE Category: Denial of Service
+
+ABUSE CASE 8: Session Hijacking via Cross-Site Scripting (XSS)
+An attacker injects malicious scripts into pages rendered by the application. When legitimate users load those pages, the scripts steal their session cookies or tokens and the attacker uses them to impersonate those users.
+STRIDE Category: Spoofing
+
+ABUSE CASE 9: Denial of Service via Vulnerable Third-Party Component
+An attacker exploits a publicly known vulnerability (CVE) in an outdated library or framework, such as a parser susceptible to ReDoS or decompression bombs, to crash the application or exhaust its resources.
+STRIDE Category: Denial of Service
+
+ABUSE CASE 10: Server-Side Request Forgery (SSRF)
+An attacker abuses functionality that fetches remote resources to make the server send requests to internal services or cloud metadata endpoints, exposing internal data or credentials.
+STRIDE Category: Information Disclosure
+
+ABUSE CASE 11: Remote Code Execution via Unrestricted File Upload
+An attacker uploads a malicious file through an upload feature that lacks type, content, or storage validation. The attacker then triggers its execution to gain control over the server.
+STRIDE Category: Elevation of Privilege
+
+ABUSE CASE 12: Business Logic Abuse
+An attacker manipulates the intended workflow of the application, for example by skipping steps in a multi-stage process or replaying requests. This produces outcomes the system was not designed to allow, without any technical flaw being exploited.
+STRIDE Category: Tampering
