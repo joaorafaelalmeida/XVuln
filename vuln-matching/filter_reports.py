@@ -15,6 +15,7 @@ import json
 import os
 import sys
 from pathlib import Path
+from uuid import uuid4
 
 REPORTS_DIR = Path.cwd() / "reports"
 FILTERED_DIR = REPORTS_DIR / "filtered"
@@ -32,6 +33,7 @@ def save_json(data, path):
 
 def summarize_sarif_finding(result, rules_map):
     """Converts a SARIF result into a clean, readable dictionary."""
+    finding_uuid = str(uuid4())
     rule_id = result.get("ruleId", "unknown")
     rule = rules_map.get(rule_id, {})
     
@@ -60,6 +62,7 @@ def summarize_sarif_finding(result, rules_map):
     help_uri = rule.get("helpUri", "")
     
     return {
+        "finding_uuid": finding_uuid,
         "rule_id": rule_id,
         "level": level,
         "title": short_desc,
@@ -174,7 +177,9 @@ if falco_files:
         findings = []
         for line in content.strip().split("\n"):
             try:
-                findings.append(json.loads(line))
+                raw_finding = json.loads(line)
+                raw_finding["finding_uuid"] = str(uuid4())
+                findings.append(raw_finding)
             except:
                 pass
         output = {"scanner": "falco", "raw_findings": findings}
@@ -211,6 +216,7 @@ if nmap_files:
         nmap_text = f.read()
     output = {
         "scanner": "nmap",
+        "finding_uuid": str(uuid4()),
         "raw_output": nmap_text
     }
     save_json(output, FILTERED_DIR / "nmap_filtered.json")

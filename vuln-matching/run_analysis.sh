@@ -13,7 +13,7 @@ PROMPT_UNMATCHED="$SCRIPT_DIR/prompt_unmatched.txt"
 FILTERED_DIR="$SCRIPT_DIR/reports/filtered"
 OUTPUT_FILE="$SCRIPT_DIR/analysis_output.md"
 STRIDE_DIR="$SCRIPT_DIR/stride_output"
-MODEL="llama3.1"
+MODEL="llama3.1:8b"
 OLLAMA_URL="http://localhost:11434/api/generate"
 BATCH_SIZE=1   # number of findings per LLaMA call
 
@@ -171,7 +171,7 @@ call_ollama() {
         -d "$(jq -n \
             --arg model "$MODEL" \
             --arg prompt "$FULL_PROMPT" \
-            '{model: $model, prompt: $prompt, stream: false, options: {num_predict: 2048, temperature: 0.1}}'
+            '{model: $model, prompt: $prompt, stream: false, options: {num_predict: 2048, temperature: 0}}'
         )")
 
     local CURL_STATUS=$?
@@ -236,10 +236,10 @@ analyze_batch() {
     fi
 
     # Check if the result is empty or whitespace-only
-    local TRIMMED_RESULT
-    TRIMMED_RESULT=$(echo "$RESULT" | tr -d '[:space:]')
+    #local TRIMMED_RESULT
+    #TRIMMED_RESULT=$(echo "$RESULT" | tr -d '[:space:]')
 
-    if [ -z "$TRIMMED_RESULT" ]; then
+    : 'if [ -z "$TRIMMED_RESULT" ]; then
         echo "  ⚠️  Empty result from main prompt. Retrying with unmatched prompt..."
 
         # Build the unmatched prompt by substituting the finding placeholder
@@ -263,12 +263,12 @@ analyze_batch() {
 
         RESULT="$RESULT_UNMATCHED"
         echo "  ✅ Unmatched fallback produced a result."
-    fi
+    fi'
 
     # Write to global output
-    echo "" >> "$OUTPUT_FILE"
+    #echo "" >> "$OUTPUT_FILE"
     echo "$RESULT" >> "$OUTPUT_FILE"
-    echo "" >> "$OUTPUT_FILE"
+    #echo "" >> "$OUTPUT_FILE"
 
     # Distribute into STRIDE files
     distribute_to_stride "$RESULT"
@@ -358,6 +358,7 @@ batch=findings[$START:$END]
 if '$FINDINGS_KEY' == 'raw_output':
     out={
         'scanner': d.get('scanner','unknown'),
+        'finding_uuid': d['finding_uuid'],
         'finding': findings
     }
 else:
@@ -381,6 +382,7 @@ print(json.dumps(out, indent=2))
         if [ "$BATCH_NUM" -lt "$TOTAL_BATCHES" ]; then
             sleep 2
         fi
+		break
     done
 
     if [ "$FAILED_BATCHES" -gt 0 ]; then

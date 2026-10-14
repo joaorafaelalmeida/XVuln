@@ -133,3 +133,6 @@ input/
 output/
 docker/.env
 .DS_Store
+vuln-matching/reports/*
+vuln-matching/stride_output/*
+vuln-matching/analysis_output.md

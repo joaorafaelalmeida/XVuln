@@ -23,24 +23,26 @@ Your job is to:
 
 If the finding matches one of the abuse cases, output the following block:
 
----
-### [STRIDE Category] - [Abuse Case Name]
-
-**Vulnerability:** <name or CWE>
-**Scanner:** <tool name>
-**Severity:** <Critical / High / Medium / Low>
-**Location:** <file, endpoint, or component>
-**Description:** <1-2 sentences in plain English>
-**Why it matches:** <explain the connection>
-**Mitigation:** <brief actionable recommendation>
+{
+    "finding_uuid": "<uuid of the finding>",
+    "stride_category": "<STRIDE category>",
+    "abuse_case": "<abuse case name>",
+    "vulnerability": "<name or CWE>",
+    "scanner": "<tool name>",
+    "severity": "<critical / high / medium / low>",
+    "location": "<file, endpoint, or component>",
+    "description": "<1-2 sentences in plain English>",
+    "matching_reason": "<explain the connection>",
+    "mitigation": "<brief actionable recommendation>"
+}
 
 ## RULES
 - Output ONLY the structured report. No introductions, no summaries, no meta-commentary.
 - Do not say "here is the report" or "based on the findings". Start directly with the first block.
-- Do not reproduce raw JSON or scanner output. Always rewrite in plain English.
+- Do not reproduce raw scanner output. Always rewrite in plain English.
 - Ignore purely informational findings with no exploitable impact.
 - Keep each block concise.
-- If the finding has no matches, do not output anything.
+- When filling the abuse case name, always ommit the first part "ABUSE CASE N: ".
 
 ## INPUT
 
