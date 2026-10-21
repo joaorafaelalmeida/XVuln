@@ -171,7 +171,7 @@ call_ollama() {
         -d "$(jq -n \
             --arg model "$MODEL" \
             --arg prompt "$FULL_PROMPT" \
-            '{model: $model, prompt: $prompt, stream: false, options: {num_predict: 2048, temperature: 0}}'
+            '{model: $model, prompt: $prompt, stream: false, think: false, options: {num_predict: 2048, temperature: 0}}'
         )")
 
     local CURL_STATUS=$?

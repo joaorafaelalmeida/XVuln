@@ -43,6 +43,7 @@ If the finding matches one of the abuse cases, output the following block:
 - Ignore purely informational findings with no exploitable impact.
 - Keep each block concise.
 - When filling the abuse case name, always ommit the first part "ABUSE CASE N: ".
+- Always use the STRIDE category associated to the matching abuse case.
 
 ## INPUT
 
