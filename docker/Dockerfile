@@ -15,6 +15,8 @@ RUN apk add --no-cache --virtual .build-deps build-base linux-headers
 
 # Setup Orchestrator
 COPY requirements.txt requirements.txt
+RUN python3 -m pip install --upgrade --ignore-installed \
+    "pip<26" setuptools wheel
 RUN pip3 install -r requirements.txt
 
 ADD tools /app/tools

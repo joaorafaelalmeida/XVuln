@@ -6,6 +6,7 @@ Filters and summarizes scanner reports for sending to LLaMA.
 - Semgrep: keeps only 'error' level findings
 - ZAP: keeps 'error' and 'warning' (discards 'note' and 'none')
 - Trivy: keeps all (small file)
+- Gitleaks: keeps all
 - Falco/Nmap: reads directly (small files)
 
 Output: Reports/filtered/ folder with simplified versions
@@ -34,7 +35,7 @@ def save_json(data, path):
 def summarize_sarif_finding(result, rules_map):
     """Converts a SARIF result into a clean, readable dictionary."""
     finding_uuid = str(uuid4())
-    rule_id = result.get("ruleId", "unknown")
+    rule_id = result.get("ruleId", result.get("id", "unknown"))
     rule = rules_map.get(rule_id, {})
     
     locations = result.get("locations", [])
@@ -157,7 +158,32 @@ else:
     print("  ⚠️  Trivy file not found")
 
 # ─────────────────────────────────────────────
-# 4. FALCO — direct summary
+# 4. GITLEAKS — all findings (small file)
+# ─────────────────────────────────────────────
+print("\n📂 Processing Gitleaks...")
+gitleaks_files = list(REPORTS_DIR.glob("*gitleaks*.sarif"))
+if gitleaks_files:
+    data = load_json(gitleaks_files[0])
+    all_findings = []
+    
+    for run in data.get("runs", []):
+        rules_map = {r["id"]: r for r in run.get("tool", {}).get("driver", {}).get("rules", [])}
+        # gitleaks seems to not fill the "results" part of the sarif format, so we give the "rules" directly instead
+        for result in run.get("tool", {}).get("driver", {}).get("rules", []):
+            all_findings.append(summarize_sarif_finding(result, rules_map))
+    
+    output = {
+        "scanner": "gitleaks",
+        "filter": "all findings",
+        "total_findings": len(all_findings),
+        "findings": all_findings
+    }
+    save_json(output, FILTERED_DIR / "gitleaks_filtered.json")
+else:
+    print("  ⚠️  Gitleaks file not found")
+
+# ─────────────────────────────────────────────
+# 5. FALCO — direct summary
 # ─────────────────────────────────────────────
 print("\n📂 Processing Falco...")
 falco_files = list(REPORTS_DIR.glob("*falco*.sarif"))

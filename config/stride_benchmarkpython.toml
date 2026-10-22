@@ -1,0 +1,66 @@
+#############################
+# Semgrep
+#############################
+
+[[runs]]
+
+tool = "semgrep"	# vulnerability scanning tool supporting 30+ coding languages
+option = "scan"
+args = ["BenchmarkPython"]
+platform = "linux/amd64"
+
+#############################
+# ZAP
+#############################
+
+[[runs]]
+
+tool = "zap"    # application runtime vulnerability scan
+option = "scan"
+args = ["https://localhost:8443"] # url of the running webserver to be analyzed by zap
+depends_on = ["gitleaks"]
+
+#############################
+# Falco
+#############################
+
+[[runs]]
+
+tool = "falco"    # OS runtime monitor
+option = "monitor"
+args = ["BenchmarkPython"]    # not needed for falco
+depends_on = ["gitleaks"]
+
+#############################
+# Gitleaks
+#############################
+
+[[runs]]
+
+tool = "gitleaks"	# scan for exposed secrets
+option = "detect"
+args = ["BenchmarkPython"]
+custom_args = "--exit-code 0"
+
+#############################
+# Nmap
+#############################
+
+[[runs]]
+
+tool = "nmap"    # endpoint enumeration scan
+option = "discover"
+args = ["8443", "localhost"] # url of the running webserver to be enumerated by nmap
+depends_on = ["gitleaks"]
+
+#############################
+# Trivy
+#############################
+
+[[runs]]
+
+tool = "trivy"
+option = "scan"
+args = ["BenchmarkPython"]	# local directory scanning option
+#args = ["owasp/benchmark"]	# docker image scanning option
+#depends_on = ["dockle"]

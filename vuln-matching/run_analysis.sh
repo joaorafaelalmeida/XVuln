@@ -26,9 +26,9 @@ DOS_FILE="$STRIDE_DIR/denial_of_service.md"
 EOP_FILE="$STRIDE_DIR/elevation_of_privilege.md"
 UNMATCHED_FILE="$STRIDE_DIR/unmatched.md"
 
-# ─────────────────────────────────────────────
+###############################################
 # Initial checks
-# ─────────────────────────────────────────────
+###############################################
 echo ""
 echo "🔍 Checking dependencies..."
 
@@ -68,9 +68,9 @@ if [ ! -d "$FILTERED_DIR" ]; then
     exit 1
 fi
 
-# ─────────────────────────────────────────────
+###############################################
 # Initialise output
-# ─────────────────────────────────────────────
+###############################################
 ABUSE_CASES_CONTENT=$(cat "$ABUSE_CASES")
 TEMPLATE=$(cat "$PROMPT_TEMPLATE")
 TEMPLATE_UNMATCHED=$(cat "$PROMPT_UNMATCHED")
@@ -87,11 +87,11 @@ done
 echo "✅ All ready. Starting analysis with batches of $BATCH_SIZE findings..."
 echo ""
 
-# ─────────────────────────────────────────────
+###############################################
 # Function: classify and distribute result blocks
 # into the corresponding STRIDE files
 # Arguments: $1=full_result
-# ─────────────────────────────────────────────
+###############################################
 distribute_to_stride() {
     local RESULT="$1"
 
@@ -153,11 +153,11 @@ for block in blocks:
 PYEOF
 }
 
-# ─────────────────────────────────────────────
+###############################################
 # Function: call Ollama with a given prompt and batch JSON
 # Returns the raw result string via stdout
 # Arguments: $1=prompt  $2=batch_json  $3=batch_label
-# ─────────────────────────────────────────────
+###############################################
 call_ollama() {
     local PROMPT="$1"
     local BATCH_JSON="$2"
@@ -209,10 +209,10 @@ except Exception as e:
     return 0
 }
 
-# ─────────────────────────────────────────────
+###############################################
 # Function: send a finding to LLaMA
 # Arguments: $1=scanner_name  $2=batch_json  $3=batch_num  $4=total_batches
-# ─────────────────────────────────────────────
+###############################################
 analyze_batch() {
     local SCANNER_NAME="$1"
     local BATCH_JSON="$2"
@@ -277,11 +277,11 @@ analyze_batch() {
     return 0
 }
 
-# ─────────────────────────────────────────────
+###############################################
 # Main function: splits findings into batches
 # and calls analyze_batch for each one
 # Arguments: $1=scanner_name  $2=report_file
-# ─────────────────────────────────────────────
+###############################################
 analyze_report() {
     local SCANNER_NAME="$1"
     local REPORT_FILE="$2"
@@ -382,7 +382,7 @@ print(json.dumps(out, indent=2))
         if [ "$BATCH_NUM" -lt "$TOTAL_BATCHES" ]; then
             sleep 2
         fi
-		break
+		#break
     done
 
     if [ "$FAILED_BATCHES" -gt 0 ]; then
@@ -393,10 +393,12 @@ print(json.dumps(out, indent=2))
     echo ""
 }
 
-# ─────────────────────────────────────────────
+###############################################
 # Process each filtered report
 # Order: smallest to largest
-# ─────────────────────────────────────────────
+###############################################
+SECONDS=0  # start timer
+
 for REPORT in \
     "$FILTERED_DIR/trivy_filtered.json" \
     "$FILTERED_DIR/falco_filtered.json" \
@@ -412,12 +414,13 @@ do
     fi
 done
 
-# ─────────────────────────────────────────────
+###############################################
 # Summary of generated STRIDE files
-# ─────────────────────────────────────────────
+###############################################
 echo ""
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 echo "✅ Analysis complete!"
+echo "⏱️ Total analysis time:  ${SECONDS} seconds"
 echo "📄 Global output:  $OUTPUT_FILE"
 echo ""
 echo "📂 STRIDE files generated in: $STRIDE_DIR"
