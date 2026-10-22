@@ -158,7 +158,7 @@ else:
     print("  ⚠️  Trivy file not found")
 
 # ─────────────────────────────────────────────
-# 4. GITLEAKS — all findings (small file)
+# 4. GITLEAKS — all findings
 # ─────────────────────────────────────────────
 print("\n📂 Processing Gitleaks...")
 gitleaks_files = list(REPORTS_DIR.glob("*gitleaks*.sarif"))
