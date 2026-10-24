@@ -278,6 +278,7 @@ SECONDS=0  # start timer
 
 for REPORT in \
     "$FILTERED_DIR/trivy_filtered.json" \
+    "$FILTERED_DIR/gitleaks_filtered.json" \
     "$FILTERED_DIR/falco_filtered.json" \
     "$FILTERED_DIR/nmap_filtered.json" \
     "$FILTERED_DIR/zap_filtered.json" \
